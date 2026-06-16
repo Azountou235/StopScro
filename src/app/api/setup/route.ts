@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server'
 
-// Important : enregistre les handlers du bot avant d'activer le webhook
-import '@/lib/registerTelegramHandlers'
-
 export async function GET() {
+  // On importe le bot UNIQUEMENT au moment de la requête (pas au build)
+  const { setWebhook } = await import('@/lib/telegramBot')
+  // On enregistre les handlers
+  await import('@/lib/registerTelegramHandlers')
+  
   try {
-    const { setWebhook } = await import('@/lib/telegramBot')
     await setWebhook()
     return NextResponse.json({ success: true, message: 'Webhook Telegram configuré' })
   } catch (e: any) {
