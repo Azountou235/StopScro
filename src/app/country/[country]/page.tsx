@@ -17,6 +17,9 @@ export default async function CountryPage({ params }: Props) {
     include: {
       scammers: {
         orderBy: { createdAt: 'desc' },
+        include: {               // ✅ Ajoute l’include pour avoir country.name et country.flag
+          country: true,
+        },
       },
     },
   })
