@@ -1,7 +1,10 @@
 import type { Config } from "tailwindcss";
 
-export default {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+const config: Config = {
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   darkMode: "class",
   theme: {
     extend: {
@@ -14,4 +17,5 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config;
+};
+export default config;
