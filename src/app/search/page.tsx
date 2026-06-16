@@ -4,12 +4,13 @@ import { ScammerCard } from '@/components/ScammerCard'
 
 export const dynamic = 'force-dynamic'
 
-export default async function SearchPage({
-  searchParams,
-}: {
-  searchParams: { q?: string }
-}) {
-  const query = searchParams.q || ''
+type Props = {
+  searchParams: Promise<{ q?: string }>
+}
+
+export default async function SearchPage({ searchParams }: Props) {
+  const { q: query = '' } = await searchParams
+
   let results: any[] = []
   if (query.length >= 2) {
     results = await prisma.scammer.findMany({
