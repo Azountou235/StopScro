@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Country {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  continent Continent
+  flag      String     // emoji
+  scammers  Scammer[]
+}
+
+model Scammer {
+  id             Int         @id @default(autoincrement())
+  name           String
+  phone          String?
+  countryId      Int
+  country        Country     @relation(fields: [countryId], references: [id])
+  city           String?
+  description    String
+  dangerLevel    DangerLevel
+  photos         String[]    // URLs
+  facebookLink   String?
+  telegramLink   String?
+  whatsappLink   String?
+  otherLinks     String[]
+  createdAt      DateTime    @default(now())
+  approved       Boolean     @default(false)
+}
+
+model PendingReport {
+  id             Int          @id @default(autoincrement())
+  name           String
+  phone          String?
+  countryName    String
+  description    String
+  dangerLevel    DangerLevel
+  socialLinks    String[]
+  photo          String?
+  reporterId     String?
+  status         ReportStatus @default(PENDING)
+  createdAt      DateTime     @default(now())
+  reviewedBy     String?
+}
+
+model TelegramAdmin {
+  id         Int      @id @default(autoincrement())
+  telegramId String   @unique
+  addedAt    DateTime @default(now())
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  email     String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
+enum Continent {
+  AFRIQUE
+  EUROPE
+  ASIE
+  AMERIQUE
+  OCEANIE
+}
+
+enum DangerLevel {
+  FAIBLE
+  MOYEN
+  ELEVE
+}
+
+enum ReportStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
